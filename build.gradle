@@ -1,0 +1,38 @@
+//apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'maven'
+
+group = 'groupId'
+version = '1.0-SNAPSHOT'
+
+war.archiveName = rootProject.name + ".war"
+
+description = """spring-webSockets demo1"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.5.2.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version:'1.5.2.RELEASE'
+}
+
+task deployToTomcat(dependsOn:build) {
+   description "Copia el war en el path de Tomcat"
+   doLast {
+	   copy {    
+	       println "in deployToTomcat"
+	       from war.archivePath
+	       into tomcatHome 
+	   }
+       println "Fin copia del fichero war sobre el path de tomcat"
+   }     
+}
+
