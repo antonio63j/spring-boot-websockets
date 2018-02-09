@@ -11,15 +11,22 @@ import java.util.Date;
 @Controller
 public class WebSocketController {
 
+    @Autowired
     private final SimpMessagingTemplate template;
 
-    @Autowired
     WebSocketController(SimpMessagingTemplate template){
         this.template = template;
     }
 
     @MessageMapping("/send/message")
     public void onReceivedMesage(String message){
+    	System.out.println(" recibido mensaje desde /send/message, se difunde a /chat");
         this.template.convertAndSend("/chat",  new SimpleDateFormat("HH:mm:ss").format(new Date())+"- "+message);
+    }
+    
+    @MessageMapping("/send/hora")
+    public void onReceivedDifundirHora(String message){
+    	System.out.println(" recibido mensaje desde /send/hora, se difunde a /hora");
+        this.template.convertAndSend("/hora",  new SimpleDateFormat("HH:mm:ss").format(new Date())+"- "+ "la hora");
     }
 }
